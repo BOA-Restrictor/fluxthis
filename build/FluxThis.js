@@ -10532,16 +10532,16 @@ return /******/ (function(modules) { // webpackBootstrap
 				response.body = xhr.responseText;
 				response.status = xhr.status;
 				response.type = xhr.getResponseHeader('Content-Type');
-				var rawHeaders = xhr.getAllResponseHeaders();
-				// Just in case some headers don't get processed properly
-				response.rawHeaders = rawHeaders;
-				// Processed headers as a hash for easier use
-				var responseHeaders = rawHeaders.split("\n");
+
+				// Expose headers in raw form (string) and in a more convenient form (hash)
+				response.rawHeaders = xhr.getAllResponseHeaders();
+				var responseHeaders = response.rawHeaders.split('\n');
 				response.headers = {};
 				for (var index in responseHeaders) {
 					var header = responseHeaders[index];
-					var parts = header.split(': ');
-					response.headers[parts[0]] = parts[1];
+					if (parts.length === 2) {
+						response.headers[parts[0].trim()] = parts[1].trim();
+					}
 				}
 
 				if (/application\/json/.test(response.type)) {
